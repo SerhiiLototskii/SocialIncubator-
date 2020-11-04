@@ -2,32 +2,27 @@ import React from 'react';
 import './App.module.css';
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
-import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialogs/Dialogs";
 import s from './App.module.css';
 import {Route} from 'react-router-dom';
-import store, {stateType} from "./components/redux/state";
-
-export type AppType = {
-    state: stateType
-    dispatch: any
-}
+import store from "./components/redux/store";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 
 
 
-function App(props: AppType) {
+
+function App() {
     return (
         <div className={s.app_wrapper}>
             <Header/>
             <Navbar/>
             <div className={s.app_wrapper_content}>
                 <Route path='/profile'
-                       render={() => <Profile profilePage={props.state.profilePage}
+                       render={() => <ProfileContainer profilePage={store.profilePage}
                                               dispatch={store.dispatch}
                                               />}/>
                 <Route path='/dialogs'
-                       render={() => <Dialogs dialogsPage={props.state.dialogsPage}
-                                              dispatch={store.dispatch}/>}/>
+                       render={() => <DialogsContainer/>}/>
             </div>
         </div>
     );

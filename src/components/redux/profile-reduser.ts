@@ -3,9 +3,20 @@ export const ADD_POST = "ADD-POST"
 
 export const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT"
 
+/*
+type AddPostActionType = {
+    type : typeof ADD_POST
+    newText:string
+}
+type ChangeNewPostTextActionType = {
+    type : typeof UPDATE_NEW_POST_TEXT
+    newText:string
+}
 
+type ProfileReducerType = {
+    type: typeof AddPostActionType| ChangeNewPostTextActionType
 
-
+}*/
 
 let initialState = {
     posts: [
@@ -14,6 +25,8 @@ let initialState = {
     ],
     newPostText: 'It kamasutra'
 }
+
+
 
 const profileReducer = (state = initialState, action : any) => {
 
