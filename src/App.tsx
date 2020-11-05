@@ -4,9 +4,8 @@ import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import s from './App.module.css';
 import {Route} from 'react-router-dom';
-import store from "./components/redux/store";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
+import Profile from "./components/Profile/Profile";
 
 
 
@@ -18,9 +17,7 @@ function App() {
             <Navbar/>
             <div className={s.app_wrapper_content}>
                 <Route path='/profile'
-                       render={() => <ProfileContainer profilePage={store.profilePage}
-                                              dispatch={store.dispatch}
-                                              />}/>
+                       render={() => <Profile/>}/>
                 <Route path='/dialogs'
                        render={() => <DialogsContainer/>}/>
             </div>
