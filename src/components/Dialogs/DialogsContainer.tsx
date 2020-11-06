@@ -11,7 +11,7 @@ let mapSateToProps = (state:any) => {
 let mapDispatchToProps = (dispatch:any) => {
     return {
          sendMessage: () => {
-            dispatch(SentMessageCreator)
+            dispatch(SentMessageCreator())
         },
         updateNewMessageText: (text: string) => {
             dispatch(OnMessageChangeCreator(text))
