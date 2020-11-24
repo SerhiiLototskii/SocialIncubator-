@@ -28,6 +28,7 @@ export type usersStateType = {
     fullName:string
     status: string
     location : locationType
+    photos: () => void
 }
 
 const usersReducer = (state = initialState, action: any) => {

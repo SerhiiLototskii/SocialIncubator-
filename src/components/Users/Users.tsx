@@ -1,7 +1,7 @@
 import React from "react";
 import {usersStateType} from "../redux/users-reduser";
 import userPhoto from "../../assets/images/user.png";
-import * as axios from 'axios'
+import  axios from 'axios'
 
 export type UsersType = {
     users: Array<usersStateType>
@@ -21,6 +21,13 @@ class Users  extends React.Component<UsersType> {
     render (){
         return (
             <div>
+                <div>
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                </div>
                 {
                     this.props.users.map(u => <div key={u.id}>
                             <div><img src={u.photos.small != null ? u.photos.small : userPhoto} alt=""/></div>
