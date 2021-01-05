@@ -1,73 +1,107 @@
-export const FOLLOW = "ADD-FOLLOW"
-
-export const UNFOLLOW = "UNFOLLOW"
-export const SET_USERS = "SET_USERS"
-
-
-let initialState = {
+let initialState: initialUsersStateType = {
     users: [
-        {id: 1,photoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQUg0cFnYeMrjdJjXv7sBPvObKwhzU7LIv2DA&usqp=CAU",
-            followed: true, fullName: "Sergey", status: "im a boss", location: {city: 'Kiev', coutry: "Ukraine"}},
-        {id: 2,photoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQUg0cFnYeMrjdJjXv7sBPvObKwhzU7LIv2DA&usqp=CAU",
-            followed: false, fullName: "Sania", status: "im a boss too", location: {city: 'Toronto', coutry: "Dubai"}},
-        {id: 3,photoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQUg0cFnYeMrjdJjXv7sBPvObKwhzU7LIv2DA&usqp=CAU",
-            followed: true, fullName: "Nikitos", status: "im a boss too", location: {city: 'Mirovoe', coutry: "Ukraine"}},
+        {
+            name: "dimon",
+            id: 3,
+            photos: {
+                small: "",
+                large: ""
+            },
+            status: "",
+            location: {
+                city: "",
+                country: ""
+            },
+            isFollow: false
+        }
+    ],
+    pageSize: 5,
+    currentPage: 2,
+    totalUsersCount: 100
 
-    ]
 }
 
-export type locationType = {
-    city: string
-    country : string
+export type userType = {
+    name: string,
+    id: number,
+    uniqueUrlName?: string,
+    photos: {
+        small: null | string,
+        large: null | string
+    },
+    status: null | string,
+    location: {
+        city: string
+        country: string
+    }
+    isFollow: boolean
+
 }
 
-export type usersStateType = {
-    id: number
-    photoUrl: string
-    followed: boolean
-    fullName:string
-    status: string
-    location : locationType
-    photos: () => void
+export  type initialUsersStateType = {
+    users: Array<userType>,
+    pageSize: number
+    currentPage: number,
+    totalUsersCount: number
+
 }
-
-const usersReducer = (state = initialState, action: any) => {
-
+const usersReducer = (state: initialUsersStateType = initialState, action: UsersActionsType): initialUsersStateType => {
     switch (action.type) {
-        case FOLLOW:
+        case "ADD-FOLLOW":
             return {
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return {...u, followed: true}
+                        return {...u, isFollow: true}
                     }
                     return u
                 })
             }
-
-        case UNFOLLOW:
+        case "UNFOLLOW":
             return {
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return {...u, followed: false}
+                        return {...u, isFollow: false}
                     }
                     return u
                 })
-
             }
-        case SET_USERS:{
-            return {...state, users:[...state.users, ...action.users]}
+        case "SET_USERS": {
+            return {...state, users: action.users}
+        }
+        case "SET_CURRENT_PAGE": {
+            return {...state, currentPage: action.currentPage}
+        }
+        case "SET_TOTAL_USERS_COUNT": {
+            return {...state, totalUsersCount: action.totalUsersCount}
         }
         default :
             return state
-
     }
 }
 
-export const followAC = (userId: number) => ({type: FOLLOW, userId})
+export const followAC = (userId: number) => ({type: "ADD-FOLLOW", userId} as const)
+export const unFollowAC = (userId: number) => ({type: "UNFOLLOW", userId} as const)
+export const setUsersAC = (users: Array<userType>) => ({type: "SET_USERS", users} as const)
+export const setCurrentPageAC = (currentPage: number) => ({type: "SET_CURRENT_PAGE", currentPage} as const)
 
-export const unFollowAC = (userId: number) => ({type: UNFOLLOW, userId})
-export const setUsersAC = (users: usersStateType) => ({type: SET_USERS, users})
+export const setTotalUsersCountAC = (totalUsersCount: number) => ({
+    type: "SET_TOTAL_USERS_COUNT",
+    totalUsersCount
+} as const)
 
-export default usersReducer
+export type followActionType = ReturnType<typeof followAC>
+export type unFollowActionType = ReturnType<typeof unFollowAC>
+export type setUsersActionType = ReturnType<typeof setUsersAC>
+export type setCurrentPageActionType = ReturnType<typeof setCurrentPageAC>
+export type setTotalUsersCountActionType = ReturnType<typeof setTotalUsersCountAC>
+
+export type UsersActionsType =
+    | followActionType
+    | unFollowActionType
+    | setUsersActionType
+    | setCurrentPageActionType
+    | setTotalUsersCountActionType
+
+export default usersReducer;

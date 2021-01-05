@@ -1,23 +1,5 @@
-export const ADD_POST = "ADD-POST"
 
-export const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT"
-
-/*
-type AddPostActionType = {
-    type : typeof ADD_POST
-    newText:string
-}
-type ChangeNewPostTextActionType = {
-    type : typeof UPDATE_NEW_POST_TEXT
-    newText:string
-}
-
-type ProfileReducerType = {
-    type: typeof AddPostActionType| ChangeNewPostTextActionType
-
-}*/
-
-let initialState = {
+let initialState: initialStateType = {
     posts: [
         {id: 1, message: 'Hi, how are you?', likesCount: 25},
         {id: 2, message: 'Im fine!', likesCount: 10}
@@ -25,24 +7,34 @@ let initialState = {
     newPostText: 'It kamasutra'
 }
 
+type initialStateType = {
+    posts: Array<{
+        id: number
+        message: string
+        likesCount: number
+    }>
+    newPostText: string
+}
 
-const profileReducer = (state = initialState, action: any) => {
+
+const profileReducer = (state:initialStateType = initialState, action: ProfileActionsType) :initialStateType=> {
 
     switch (action.type) {
-        case ADD_POST: {
+        case "ADD-POST": {
             let newPost = {
                 id: 3, message: state.newPostText, likesCount: 0
             }
             return {
                 ...state,
                 posts: [...state.posts, newPost],
-                newPostText : ''
+                newPostText: ''
             }
         }
-        case UPDATE_NEW_POST_TEXT: {
+        case "UPDATE-NEW-POST-TEXT": {
             return {
                 ...state,
-                newPostText : action.newText}
+                newPostText: action.newText
+            }
 
         }
         default :
@@ -51,8 +43,15 @@ const profileReducer = (state = initialState, action: any) => {
     }
 }
 
-export const AddPostActionCreator = () => ({type: ADD_POST})
+export const AddPostAC = () => ({type: "ADD-POST"} as const)
 
-export const OnPostChangeActionCreator = (text: string) => ({type: UPDATE_NEW_POST_TEXT, newText: text})
+export const OnPostChangeAC = (text: string) => ({type: "UPDATE-NEW-POST-TEXT", newText: text} as const)
+
+export type AddPostActionType = ReturnType<typeof AddPostAC>
+export type OnPostChangeActionType = ReturnType<typeof OnPostChangeAC>
+
+export type ProfileActionsType =
+    | AddPostActionType
+    | OnPostChangeActionType
 
 export default profileReducer

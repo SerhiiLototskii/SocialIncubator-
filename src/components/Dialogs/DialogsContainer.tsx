@@ -1,20 +1,21 @@
-import React from 'react';
-import {OnMessageChangeCreator, SentMessageCreator} from "../redux/dialogs-reduser";
+import React, {Dispatch} from 'react';
+import {DIalogsReduserActionsType, OnMessageChangeAC, SentMessageAC} from "../redux/dialogs-reduser";
 import {connect} from "react-redux";
 import Dialogs from "./Dialogs";
+import {AppRootStateType} from "../redux/redux-store";
 
-let mapSateToProps = (state:any) => {
+let mapSateToProps = (state:AppRootStateType) => {
     return {
         dialogsPage: state.dialogsPage
     }
 }
-let mapDispatchToProps = (dispatch:any) => {
+let mapDispatchToProps = (dispatch:Dispatch<DIalogsReduserActionsType>) => {
     return {
          sendMessage: () => {
-            dispatch(SentMessageCreator())
+            dispatch(SentMessageAC())
         },
         updateNewMessageText: (text: string) => {
-            dispatch(OnMessageChangeCreator(text))
+            dispatch(OnMessageChangeAC(text))
         },
 
     }

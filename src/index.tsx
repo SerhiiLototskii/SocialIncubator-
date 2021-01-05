@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
-import store from "./components/redux/redux-store";
+
 import {Provider} from "react-redux";
+import store from "./components/redux/redux-store";
 
 export type dialogType = {
     id: number

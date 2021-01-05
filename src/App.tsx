@@ -5,11 +5,8 @@ import Navbar from "./components/Navbar/Navbar";
 import s from './App.module.css';
 import {Route} from 'react-router-dom';
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
-import Profile from "./components/Profile/Profile";
 import UsersContainer from "./components/Users/UsersContainer";
-
-
-
+import Profile from "./components/Profile/Profile";
 
 function App() {
     return (
@@ -28,5 +25,4 @@ function App() {
         </div>
     );
 }
-
 export default App;

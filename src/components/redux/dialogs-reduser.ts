@@ -1,8 +1,4 @@
-export const SEND_MESSAGE = "SEND-MESSAGE"
-
-export const UPDATE_NEW_MESSAGE_TEXT = "UPDATE-NEW-MESSAGE-TEXT"
-
-let initialState = {
+let initialState: initialStateType = {
     dialogs: [
         {id: 1, name: 'Dimych'},
         {id: 2, name: 'Andrey'},
@@ -11,7 +7,6 @@ let initialState = {
         {id: 5, name: 'Viktor'},
         {id: 6, name: 'Valera'},
     ],
-
     messages: [
         {id: 1, message: 'Hi'},
         {id: 2, message: 'How are you?'},
@@ -23,22 +18,34 @@ let initialState = {
     newMessageText: 'It kamasutra'
 }
 
-const dialogReducer = (state = initialState, action: any) => {
+type initialStateType = {
+    dialogs: Array<{
+        id: number
+        name: string
+    }>
+    messages: Array<{
+        id: number
+        message: string
+    }>
+    newMessageText: string
+}
+
+const dialogReducer = (state: initialStateType = initialState, action: DIalogsReduserActionsType): initialStateType => {
 
     switch (action.type) {
-        case SEND_MESSAGE: {
+        case "SEND-MESSAGE": {
 
             return {
                 ...state,
-                newMessageText : '',
-                messages: [...state.messages, {id: 3, message: state.newMessageText} ]
+                newMessageText: '',
+                messages: [...state.messages, {id: 3, message: state.newMessageText}]
             }
 
         }
-        case UPDATE_NEW_MESSAGE_TEXT: {
-            return  {
+        case "UPDATE-NEW-MESSAGE-TEXT": {
+            return {
                 ...state,
-                newMessageText : action.messageText
+                newMessageText: action.messageText
             }
         }
         default :
@@ -46,8 +53,15 @@ const dialogReducer = (state = initialState, action: any) => {
     }
 }
 
-export const SentMessageCreator = () => ({type: SEND_MESSAGE})
-export const OnMessageChangeCreator = (text: string) => ({type: UPDATE_NEW_MESSAGE_TEXT, messageText: text})
+export const SentMessageAC = () => ({type: "SEND-MESSAGE"} as const)
+export const OnMessageChangeAC = (text: string) => ({type: "UPDATE-NEW-MESSAGE-TEXT", messageText: text} as const)
+
+export type SentMessageActionType = ReturnType<typeof SentMessageAC>
+export type OnMessageChangeActionType = ReturnType<typeof OnMessageChangeAC>
+
+export type DIalogsReduserActionsType =
+    | SentMessageActionType
+    | OnMessageChangeActionType
 
 
 export default dialogReducer
