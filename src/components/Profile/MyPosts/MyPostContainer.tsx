@@ -1,8 +1,8 @@
 import React, {Dispatch} from 'react';
-import MyPosts from "./MyPosts/MyPosts";
+import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
-import {AddPostAC, OnPostChangeAC, ProfileActionsType} from "../redux/profile-reduser";
-import {AppRootStateType} from "../redux/redux-store";
+import {AddPostAC, OnPostChangeAC, ProfileActionsType} from "../../redux/profile-reduser";
+import {AppRootStateType} from "../../redux/redux-store";
 
 
 let mapSateToProps = (state:AppRootStateType) => {

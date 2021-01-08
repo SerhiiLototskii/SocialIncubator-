@@ -16,8 +16,9 @@ let initialState: initialUsersStateType = {
         }
     ],
     pageSize: 5,
-    currentPage: 2,
-    totalUsersCount: 100
+    currentPage: 1,
+    totalUsersCount: 100,
+    isFetching: false
 
 }
 
@@ -43,6 +44,7 @@ export  type initialUsersStateType = {
     pageSize: number
     currentPage: number,
     totalUsersCount: number
+    isFetching: boolean
 
 }
 const usersReducer = (state: initialUsersStateType = initialState, action: UsersActionsType): initialUsersStateType => {
@@ -76,6 +78,9 @@ const usersReducer = (state: initialUsersStateType = initialState, action: Users
         case "SET_TOTAL_USERS_COUNT": {
             return {...state, totalUsersCount: action.totalUsersCount}
         }
+        case "TOGGLE_IS_FETCHING": {
+            return {...state, isFetching: action.isFetching}
+        }
         default :
             return state
     }
@@ -85,6 +90,7 @@ export const followAC = (userId: number) => ({type: "ADD-FOLLOW", userId} as con
 export const unFollowAC = (userId: number) => ({type: "UNFOLLOW", userId} as const)
 export const setUsersAC = (users: Array<userType>) => ({type: "SET_USERS", users} as const)
 export const setCurrentPageAC = (currentPage: number) => ({type: "SET_CURRENT_PAGE", currentPage} as const)
+export const toggleIsFetchingAC = (isFetching: boolean) => ({type: "TOGGLE_IS_FETCHING", isFetching} as const)
 
 export const setTotalUsersCountAC = (totalUsersCount: number) => ({
     type: "SET_TOTAL_USERS_COUNT",
@@ -96,6 +102,7 @@ export type unFollowActionType = ReturnType<typeof unFollowAC>
 export type setUsersActionType = ReturnType<typeof setUsersAC>
 export type setCurrentPageActionType = ReturnType<typeof setCurrentPageAC>
 export type setTotalUsersCountActionType = ReturnType<typeof setTotalUsersCountAC>
+export type toggleIsFetchingActionType = ReturnType<typeof toggleIsFetchingAC>
 
 export type UsersActionsType =
     | followActionType
@@ -103,5 +110,6 @@ export type UsersActionsType =
     | setUsersActionType
     | setCurrentPageActionType
     | setTotalUsersCountActionType
+    | toggleIsFetchingActionType
 
 export default usersReducer;

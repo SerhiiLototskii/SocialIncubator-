@@ -6,7 +6,7 @@ import s from './App.module.css';
 import {Route} from 'react-router-dom';
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from "./components/Users/UsersContainer";
-import Profile from "./components/Profile/Profile";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 
 function App() {
     return (
@@ -15,12 +15,11 @@ function App() {
             <Navbar/>
             <div className={s.app_wrapper_content}>
                 <Route path='/profile'
-                       render={() => <Profile/>}/>
+                       render={() => <ProfileContainer/>}/>
                 <Route path='/dialogs'
                        render={() => <DialogsContainer/>}/>
                 <Route path='/users'
                        render={() => <UsersContainer/>}/>
-
             </div>
         </div>
     );
