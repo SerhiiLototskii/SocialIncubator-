@@ -1,3 +1,7 @@
+import {restAPI} from "../Rest-API/restAPI";
+import {setTotalUsersCountAC, setUsersAC, toggleIsFetchingAC, UsersActionsType} from "./users-reduser";
+import {Dispatch} from "react";
+
 let initialState: initialStateType = {
     profile : {
         aboutMe: "я круто чувак 1001%",
@@ -93,6 +97,17 @@ export const AddPostAC = () => ({type: "ADD-POST"} as const)
 export const OnPostChangeAC = (text: string) => ({type: "UPDATE-NEW-POST-TEXT", newText: text} as const)
 export const setUserProfileAC = (profile: userProfileType) => ({type: "SET-USER-PROFILE", profile} as const)
 
+export const getProfileTC = (userId: number, ) => {
+    return (dispatch: ThunkDispatch) => {
+        restAPI.getProfile(userId)
+            .then(data => {
+                dispatch(setUserProfileAC(data))
+            })
+    }
+}
+
+type ThunkDispatch = Dispatch<ProfileActionsType>
+
 export type AddPostActionType = ReturnType<typeof AddPostAC>
 export type OnPostChangeActionType = ReturnType<typeof OnPostChangeAC>
 export type setUserProfileACActionType = ReturnType<typeof setUserProfileAC>
@@ -101,5 +116,6 @@ export type ProfileActionsType =
     | setUserProfileACActionType
     | AddPostActionType
     | OnPostChangeActionType
+
 
 export default profileReducer

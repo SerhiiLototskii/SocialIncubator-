@@ -2,35 +2,53 @@ import React from 'react';
 import Profile from "./Profile";
 import {connect} from "react-redux";
 import {AppRootStateType} from "../redux/redux-store";
-import axios from "axios";
-import {setUserProfileAC, userProfileType} from "../redux/profile-reduser";
+import {getProfileTC, setUserProfileAC, userProfileType} from "../redux/profile-reduser";
+import {Redirect, withRouter} from 'react-router-dom';
+
+
 
 export type ProfileContainerPropsType = {
     setUserProfile: (profile: userProfileType) => void
     profile: userProfileType
+    match: {
+        params: {
+            userId:number
+        }
+    }
+    getProfileTC: (userId: number) => void
+    isAuth: boolean
 }
 
 class ProfileContainer extends React.Component<ProfileContainerPropsType> {
+
     componentDidMount() {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/2`)
-            .then(response => {
-                this.props.setUserProfile(response.data)
-            })
+        let userId = this.props.match.params.userId
+        if(!userId) {
+            userId= 2
+        }
+        getProfileTC(userId)
     }
 
     render() {
+        if(this.props.isAuth === false) return <Redirect to={"/login"} />
+
         return <Profile
             {...this.props}
-            profile={this.props.profile}/>
+            profile={this.props.profile}
+           />
     }
 }
 
 let mapSateToProps = (state: AppRootStateType) => {
     return {
-        profile: state.profilePage.profile
+        profile: state.profilePage.profile,
+        isAuth: state.auth.isAuth
     }
 }
+// @ts-ignore
+ const ProfileContainerWithRouter = withRouter(ProfileContainer)
 
 export default connect(mapSateToProps, {
     setUserProfile: setUserProfileAC,
-})(ProfileContainer)
+    getProfileTC:getProfileTC
+})(ProfileContainerWithRouter)

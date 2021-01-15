@@ -1,20 +1,24 @@
 import React, {Dispatch} from 'react';
 
-
 import {
-
     setCurrentPageAC,
     toggleIsFetchingAC,
     setTotalUsersCountAC,
-    setUsersAC,
-    unFollowAC,
-    userType, followAC,
+    userType,
+    followingInProgressAC,
+    getUsersTC,
+    onPageChangedTC,
+    unfollowTC,
+    followTC,
+
 } from "../redux/users-reduser";
 import {AppRootStateType} from "../redux/redux-store";
-import axios from "axios";
 import Users from "./Users";
 import {connect} from "react-redux";
 import {Preloader} from "../common/preloader/Preloader";
+import {compose} from "redux";
+import {withAuthRedirect} from "../Hoc/withAuthRedirect";
+
 
 
 export type UsersContainerPropsType = {
@@ -24,37 +28,23 @@ export type UsersContainerPropsType = {
     totalUsersCount: number
     pageSize: number
     users: Array<userType>
-    follow: (id: number) => void
-    unfollow: (id: number) => void
-    setUsers: (users: Array<userType>) => void
+    getUsersTC: (currentPage: number,pageSize: number) => void
+    onPageChangedTC: (currentPage: number,pageSize: number) => void
     isFetching: boolean
     toggleIsFetching: (isFetching: boolean) => void
+    toggleFollowingInProgress:Array<number>
+    unfollowTC:( userId: number) => void
+    followTC:( userId: number) => void
+    isAuth: boolean
 }
 
-
 class UsersContainer extends React.Component<UsersContainerPropsType> {
-
     componentDidMount() {
-        this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-            .then(response => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount)
-            })
+        this.props.getUsersTC(this.props.currentPage,this.props.pageSize)
     }
-
     onPageChanged(currentPage: number) {
-        this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${this.props.pageSize}`)
-            .then(response => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
-                this.props.setCurrentPage(currentPage)
-            })
+        this.props.onPageChangedTC(currentPage,this.props.pageSize)
     }
-
-
 
     render() {
         return <>
@@ -65,11 +55,13 @@ class UsersContainer extends React.Component<UsersContainerPropsType> {
                    totalUsersCount={this.props.totalUsersCount}
                    pageSize={this.props.pageSize}
                    users={this.props.users}
-                   follow={this.props.follow}
-                   unfollow={this.props.unfollow}
-                   setUsers={this.props.setUsers}
-                   onPageChanged={this.onPageChanged.bind(this)}/>
-
+                   toggleFollowingInProgress={this.props.toggleFollowingInProgress}
+                   toggleIsFetching={this.props.toggleIsFetching}
+                   onPageChanged={this.onPageChanged.bind(this)}
+                   unfollowTC= {this.props.unfollowTC}
+                   followTC= {this.props.followTC}
+                   isAuth= {this.props.isAuth}
+            />
         </>
 
     }
@@ -83,18 +75,27 @@ let mapSateToProps = (state: AppRootStateType) => {
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
         isFetching: state.usersPage.isFetching,
-
+        toggleFollowingInProgress:state.usersPage.toggleFollowingInProgress,
+        isAuth: state.auth.isAuth
     }
 }
 
-export default connect(mapSateToProps, {
-    follow: followAC,
-    unfollow: unFollowAC,
-    setUsers: setUsersAC,
+export default compose(
+    withAuthRedirect,
+    connect(mapSateToProps, {
     setCurrentPage: setCurrentPageAC,
     setTotalUsersCount: setTotalUsersCountAC,
-    toggleIsFetching : toggleIsFetchingAC
-})(UsersContainer)
+    toggleIsFetching: toggleIsFetchingAC,
+    followingInProgress: followingInProgressAC,
+    getUsersTC: getUsersTC,
+    onPageChangedTC: onPageChangedTC,
+    unfollowTC: unfollowTC,
+    followTC: followTC}),
+
+    (UsersContainer))
+
+
+
 
 
 
